@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "g:\\DatingApp\\API\\API.csproj": {}
+    "G:\\DatingApp\\API\\API.csproj": {}
   },
   "projects": {
-    "g:\\DatingApp\\API\\API.csproj": {
+    "G:\\DatingApp\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "g:\\DatingApp\\API\\API.csproj",
+        "projectUniqueName": "G:\\DatingApp\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "g:\\DatingApp\\API\\API.csproj",
+        "projectPath": "G:\\DatingApp\\API\\API.csproj",
         "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "g:\\DatingApp\\API\\obj\\",
+        "outputPath": "G:\\DatingApp\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -39,6 +39,16 @@
           "targetAlias": "net7.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[7.0.11, )"
             },
