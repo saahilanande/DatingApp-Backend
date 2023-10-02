@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API;
 
@@ -18,16 +19,16 @@ public class UserController : ControllerBase
 
     //Endpoint to get all users
     [HttpGet]
-    public ActionResult<IEnumerable<AppUser>> GetUsers()
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
-        return dataContext.Users.ToList();
+        return await dataContext.Users.ToListAsync();
     }
 
     //Endpoint to get a user by Id
     [HttpGet("{id}")]
-    public ActionResult<AppUser> GetUser(int id)
+    public async Task<ActionResult<AppUser>> GetUser(int id)
     {
-        return dataContext.Users.Find(id);
+        return await dataContext.Users.FindAsync(id);
     }
 
 }
