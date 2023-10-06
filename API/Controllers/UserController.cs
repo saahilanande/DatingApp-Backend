@@ -31,15 +31,6 @@ public class UserController : BaseController
         return await dataContext.Users.FindAsync(id);
     }
 
-    // //Endpoint to add a user
-    // [HttpPost]
-    // public async Task<ActionResult> addUser(AppUser appUser)
-    // {
-    //     var user = new AppUser(){
-
-    //     };
-    // }
-
 
     //Endpoint to delete a User
     [HttpDelete("{id}")]
