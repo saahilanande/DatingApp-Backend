@@ -1,7 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
 using API.Data;
+using API.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -15,14 +17,16 @@ public class AccountController : BaseController
     }
 
     [HttpPost("register")] //api/account/register
-    public async Task<ActionResult<AppUser>> Register(string username, string password)
+    public async Task<ActionResult<AppUser>> Register(DtoRegister dtoRegister)
     {
         using var hmac = new HMACSHA512();
 
+        if (await CheckUser(dtoRegister.UserName)) return BadRequest("Username Taken");
+
         var user = new AppUser
         {
-            UserName = username,
-            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
+            UserName = dtoRegister.UserName,
+            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dtoRegister.Password)),
             passwordSalt = hmac.Key
         };
 
@@ -31,6 +35,11 @@ public class AccountController : BaseController
 
         return user;
 
+    }
+
+    public async Task<bool> CheckUser(string username)
+    {
+        return await _context.Users.AnyAsync(x => x.UserName == username);
     }
 
 
