@@ -37,6 +37,27 @@ public class AccountController : BaseController
 
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<AppUser>> Login(DtoLogin dtoLogin)
+    {
+
+        var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == dtoLogin.UserName);
+
+        if (user == null) return Unauthorized("Invalid username");
+
+        using var hmac = new HMACSHA512(user.passwordSalt);
+
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dtoLogin.Password));
+
+        for (int i = 0; i <= computedHash.Length; i++)
+        {
+            if (computedHash[i] != user.passwordHash[i]) return Unauthorized("invalid Password");
+        }
+
+        return user;
+
+    }
+
     public async Task<bool> CheckUser(string username)
     {
         return await _context.Users.AnyAsync(x => x.UserName == username);
