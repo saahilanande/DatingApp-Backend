@@ -2,6 +2,8 @@ using System.Security.Cryptography;
 using System.Text;
 using API.Data;
 using API.DTOs;
+using API.Interfaces;
+using API.Serives;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +12,16 @@ namespace API.Controllers;
 public class AccountController : BaseController
 {
     private readonly DataContext _context;
+    private readonly ITokenService _tokenService;
 
-    public AccountController(DataContext dataContext)
+    public AccountController(DataContext dataContext, ITokenService tokenService)
     {
         _context = dataContext;
+        _tokenService = tokenService;
     }
 
     [HttpPost("register")] //api/account/register
-    public async Task<ActionResult<AppUser>> Register(DtoRegister dtoRegister)
+    public async Task<ActionResult<DtoUser>> Register(DtoRegister dtoRegister)
     {
         using var hmac = new HMACSHA512();
 
@@ -33,12 +37,15 @@ public class AccountController : BaseController
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return user;
+        return new DtoUser{
+            UserName = user.UserName,
+            Token = _tokenService.CreateToken(user)
+        };
 
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AppUser>> Login(DtoLogin dtoLogin)
+    public async Task<ActionResult<DtoUser>> Login(DtoLogin dtoLogin)
     {
 
         var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == dtoLogin.UserName);
@@ -54,7 +61,10 @@ public class AccountController : BaseController
             if (computedHash[i] != user.passwordHash[i]) return Unauthorized("invalid Password");
         }
 
-        return user;
+         return new DtoUser{
+            UserName = user.UserName,
+            Token = _tokenService.CreateToken(user)
+        };
 
     }
 

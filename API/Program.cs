@@ -1,4 +1,6 @@
 using API.Data;
+using API.Interfaces;
+using API.Serives;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,9 @@ builder.Services.AddDbContext<DataContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+//Injecting token service
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
